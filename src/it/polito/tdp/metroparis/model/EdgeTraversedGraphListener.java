@@ -2,6 +2,7 @@ package it.polito.tdp.metroparis.model;
 
 import java.util.Map;
 
+import org.jgrapht.Graph;
 import org.jgrapht.event.ConnectedComponentTraversalEvent;
 import org.jgrapht.event.EdgeTraversalEvent;
 import org.jgrapht.event.TraversalListener;
@@ -10,11 +11,13 @@ import org.jgrapht.graph.DefaultEdge;
 
 public class EdgeTraversedGraphListener implements TraversalListener<Fermata, DefaultEdge> {
 	
+	Graph<Fermata, DefaultEdge> grafo ;
 	Map<Fermata, Fermata> back ;
 
 
-	public EdgeTraversedGraphListener(Map<Fermata, Fermata> back) {
+	public EdgeTraversedGraphListener(Graph<Fermata, DefaultEdge> grafo, Map<Fermata, Fermata> back) {
 		super();
+		this.grafo = grafo ;
 		this.back = back;
 	}
 
@@ -27,9 +30,27 @@ public class EdgeTraversedGraphListener implements TraversalListener<Fermata, De
 	}
 
 	@Override
-	public void edgeTraversed(EdgeTraversalEvent<DefaultEdge> e) {
-	
-		back.put(e.getEdge().destinationVertex(), e.getEdge().sourceVertex() ); 
+	public void edgeTraversed(EdgeTraversalEvent<DefaultEdge> ev) {
+	/*
+	 * back codifica relazioni del tipo child->parent
+	 * 
+	 * per un nuovo vertice 'child' scoperto
+	 * devo avere che:
+	 * - child è ancora sconosciuto (non ancora trovato)
+	 * - parent è già stato visitato
+	 */
+		
+		Fermata sourceVertex = grafo.getEdgeSource(ev.getEdge()) ;
+		Fermata targetVertex = grafo.getEdgeTarget(ev.getEdge()) ;
+		
+		/* se il grafo è orientato, allora source==parent, target==child */
+		/* se in grafo non è orientato, potrebbe essere al contrario... */
+		
+		if( !back.containsKey(targetVertex) && back.containsKey(sourceVertex) ) {
+			back.put(targetVertex, sourceVertex) ;
+		} else if(!back.containsKey(sourceVertex) && back.containsKey(targetVertex)) {
+			back.put(sourceVertex, targetVertex) ;
+		}
 		
 	}
 
