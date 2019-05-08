@@ -105,8 +105,8 @@ public class Model {
 		List<Fermata> result = new ArrayList<Fermata>();
 		backVisit = new HashMap<>();
 
-//		GraphIterator<Fermata, DefaultEdge> it = new BreadthFirstIterator<>(this.grafo, source);
-		GraphIterator<Fermata, DefaultEdge> it = new DepthFirstIterator<>(this.grafo, source) ;
+		GraphIterator<Fermata, DefaultEdge> it = new BreadthFirstIterator<>(this.grafo, source);
+//		GraphIterator<Fermata, DefaultEdge> it = new DepthFirstIterator<>(this.grafo, source) ;
 
 		it.addTraversalListener(new Model.EdgeTraversedGraphListener());
 		
