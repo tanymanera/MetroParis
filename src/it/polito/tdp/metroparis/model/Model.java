@@ -15,7 +15,6 @@ import org.jgrapht.event.VertexTraversalEvent;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.traverse.BreadthFirstIterator;
-import org.jgrapht.traverse.DepthFirstIterator;
 import org.jgrapht.traverse.GraphIterator;
 
 import it.polito.tdp.metroparis.db.MetroDAO;
@@ -75,19 +74,7 @@ public class Model {
 
 		Graphs.addAllVertices(this.grafo, this.fermate);
 
-		// Aggiungi gli archi (opzione 1)
-		/*
-		 * for( Fermata partenza : this.grafo.vertexSet() ) { //
-		 * System.out.print(partenza.getIdFermata()+" "); for( Fermata arrivo:
-		 * this.grafo.vertexSet() ) {
-		 * 
-		 * if(dao.esisteConnessione(partenza, arrivo)) { this.grafo.addEdge(partenza,
-		 * arrivo) ; }
-		 * 
-		 * } }
-		 */
-
-		// Aggiungi gli archi (opzione 2)
+		// Aggiungi gli archi
 
 		for (Fermata partenza : this.grafo.vertexSet()) {
 			List<Fermata> arrivi = dao.stazioniArrivo(partenza, fermateIdMap);
@@ -96,7 +83,6 @@ public class Model {
 				this.grafo.addEdge(partenza, arrivo);
 		}
 
-		// Aggiungi gli archi (opzione 3)
 
 	}
 
@@ -106,52 +92,14 @@ public class Model {
 		backVisit = new HashMap<>();
 
 		GraphIterator<Fermata, DefaultEdge> it = new BreadthFirstIterator<>(this.grafo, source);
-//		GraphIterator<Fermata, DefaultEdge> it = new DepthFirstIterator<>(this.grafo, source) ;
 
 		it.addTraversalListener(new Model.EdgeTraversedGraphListener());
-		
-		/*
-		it.addTraversalListener(new TraversalListener<Fermata, DefaultEdge>() {
-
-			@Override
-			public void connectedComponentFinished(ConnectedComponentTraversalEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void connectedComponentStarted(ConnectedComponentTraversalEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void edgeTraversed(EdgeTraversalEvent<DefaultEdge> e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void vertexFinished(VertexTraversalEvent<Fermata> e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void vertexTraversed(VertexTraversalEvent<Fermata> e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		*/
 		
 		backVisit.put(source, null);
 
 		while (it.hasNext()) {
 			result.add(it.next());
 		}
-
-//		System.out.println(backVisit) ;
 
 		return result;
 
