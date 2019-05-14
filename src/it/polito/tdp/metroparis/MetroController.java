@@ -45,8 +45,7 @@ public class MetroController {
 			return;
 		}
 
-		model.fermateRaggiungibili(partenza);
-		List<Fermata> percorso = model.percorsoFinoA(arrivo);
+		List<Fermata> percorso = model.trovaCamminoMinimo(partenza, arrivo) ;
 
 		txtResult.appendText(String.format("Percorso da %s a %s (%d fermate):\n", partenza.getNome(),
 				arrivo.getNome(), percorso.size()));
