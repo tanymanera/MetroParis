@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.javadocmd.simplelatlng.LatLng;
 
@@ -14,10 +15,10 @@ import it.polito.tdp.metroparis.model.Linea;
 
 public class MetroDAO {
 
-	public List<Fermata> getAllFermate() {
+	public List<Fermata> getAllFermate(Map<Integer, Fermata> identityMap) {
 
 		final String sql = "SELECT id_fermata, nome, coordx, coordy FROM fermata ORDER BY nome ASC";
-		List<Fermata> fermate = new ArrayList<Fermata>();
+		List<Fermata> fermate = new ArrayList<>();
 
 		try {
 			Connection conn = DBConnect.getConnection();
@@ -25,20 +26,23 @@ public class MetroDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-				Fermata f = new Fermata(rs.getInt("id_Fermata"), rs.getString("nome"),
-						new LatLng(rs.getDouble("coordx"), rs.getDouble("coordy")));
-				fermate.add(f);
+				if (!(identityMap.containsKey(rs.getInt("id_Fermata")))) {
+					Fermata f = new Fermata(rs.getInt("id_Fermata"), rs.getString("nome"),
+							new LatLng(rs.getDouble("coordx"), rs.getDouble("coordy")));
+					identityMap.put(rs.getInt("id_Fermata"), f);
+					fermate.add(f);
+				}
 			}
 
 			st.close();
 			conn.close();
+			return fermate;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Errore di connessione al Database.");
 		}
 
-		return fermate;
 	}
 
 	public List<Linea> getAllLinee() {
@@ -67,6 +71,5 @@ public class MetroDAO {
 
 		return linee;
 	}
-
 
 }

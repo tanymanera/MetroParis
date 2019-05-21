@@ -2,9 +2,13 @@ package it.polito.tdp.metroparis.db;
 
 import java.sql.Connection;
 
+import it.polito.tdp.metroparis.model.Model;
+
 public class TestDAO {
 
 	public static void main(String[] args) {
+		
+		Model model = new Model();
 		
 		try {
 			Connection connection = DBConnect.getConnection();
@@ -13,7 +17,7 @@ public class TestDAO {
 			
 			MetroDAO dao = new MetroDAO() ;
 			
-			System.out.println(dao.getAllFermate()) ;
+			System.out.println(dao.getAllFermate(model.getIdentityMap())) ;
 			System.out.println(dao.getAllLinee()) ;
 
 		} catch (Exception e) {
