@@ -10,6 +10,17 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 
 import it.polito.tdp.metroparis.db.MetroDAO;
 
+
+/**
+ * Soluzione sbagliata perché ogni oggetto fermata viene 
+ * creato tre volte:
+ * -una prima quando si creano i vertici del grafo
+ * -una seconda quando si creano gli oggetti connessione, 
+ * 	che al loro interno contengono partenza e arrivo.
+ * 
+ * @author Tany
+ *
+ */
 public class Model {
 
 	private List<Fermata> fermate;
