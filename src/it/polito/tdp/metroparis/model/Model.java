@@ -1,6 +1,7 @@
 package it.polito.tdp.metroparis.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jgrapht.Graph;
@@ -22,6 +23,7 @@ import it.polito.tdp.metroparis.db.MetroDAO;
 public class Model {
 
 	private Graph<Fermata, DefaultEdge> metro;
+	private List<Fermata> stazioni;
 	private Map<Integer, Fermata> identityMap;
 	
 	public Model() {
@@ -33,7 +35,7 @@ public class Model {
 		
 		MetroDAO dao = new MetroDAO();
 		ConnessioneDAO daoC = new ConnessioneDAO();
-		dao.getAllFermate(identityMap);
+		stazioni =(dao.getAllFermate(identityMap));
 		
 		//aggiungi i vertici al grafo
 		//ovvero le fermate alla metrò
@@ -52,4 +54,9 @@ public class Model {
 	public Map<Integer, Fermata> getIdentityMap() {
 		return identityMap;
 	}
+
+	public List<Fermata> getStazioni() {
+		return stazioni;
+	}
+
 }
